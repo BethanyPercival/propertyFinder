@@ -1,6 +1,6 @@
 'use strict'
 
-import React, { Component} from 'react';
+import React, {Component} from 'react';
 import {
     StyleSheet,
     Text,
@@ -49,27 +49,27 @@ export default class SearchPage extends Component<{}> {
     }
 
     _executeQuery = (query) => {
-      console.log(query);
-      this.setState({ isLoading:true });
-      fetch(query)
-          .then(response => response.json())
-          .then(json => this._handleResponse(json.response))
-          .catch(error =>
-            this.setState({
-                isLoading: false,
-                message: 'Something bad happened ' + error
-            })
-          );
+        console.log(query);
+        this.setState({isLoading: true});
+        fetch(query)
+            .then(response => response.json())
+            .then(json => this._handleResponse(json.response))
+            .catch(error =>
+                this.setState({
+                    isLoading: false,
+                    message: 'Something bad happened ' + error
+                })
+            );
     };
 
     _handleResponse = (response) => {
-        this.setState({ isLoading: false, message: ''});
-        if(response.application_response_code.substr(0,1) === '1') {
+        this.setState({isLoading: false, message: ''});
+        if (response.application_response_code.substr(0, 1) === '1') {
             this.props.navigation.navigate(
                 'Results', {listings: response.listings}
             );
         } else {
-            this.setState({ message: 'Location not recognised; please try again.'});
+            this.setState({message: 'Location not recognised; please try again.'});
         }
     };
 
@@ -79,7 +79,7 @@ export default class SearchPage extends Component<{}> {
     };
 
     _onSearchTextChanged = (event) => {
-         this.setState({searchString: event.nativeEvent.text});
+        this.setState({searchString: event.nativeEvent.text});
     };
 
     _onClickCheckBox = (id) => {
@@ -90,8 +90,8 @@ export default class SearchPage extends Component<{}> {
         const spinner = this.state.isLoading ?
             <ActivityIndicator size={'large'}/> : null;
 
-        return(
-            <View style={styles.container}>
+        return (
+            <View style={styles.background}>
                 <Text style={styles.description}>
                     Please enter your search criteria
                 </Text>
@@ -109,12 +109,49 @@ export default class SearchPage extends Component<{}> {
                         title='Go'/>
                 </View>
 
-                <Text>Listing Type</Text>
+                <Text style={styles.heading}>
+                    Listing Type
+                </Text>
 
                 <View style={styles.flowRight}>
-                    <CheckBox
-                        onClick={this._onClickCheckBox('buy')}
-                        leftText='Buy'/>
+                    <View style={[styles.checkBoxElement, styles.flowRight]}>
+                        <Text>Buy</Text>
+                        <CheckBox
+                            style={styles.checkBox}
+                            onClick={this._onClickCheckBox('buy')}/>
+                    </View>
+
+                    <View style={[styles.checkBoxElement, styles.flowRight]}>
+                        <Text>Rent</Text>
+                        <CheckBox
+                            style={styles.checkBox}
+                            onClick={this._onClickCheckBox('rent')}/>
+                    </View>
+
+                    <View style={[styles.checkBoxElement, styles.flowRight]}>
+                        <Text>Share</Text>
+                        <CheckBox
+                            style={styles.checkBox}
+                            onClick={this._onClickCheckBox('share')}/>
+                    </View>
+                </View>
+
+                <Text style={styles.heading}>
+                    Price
+                </Text>
+
+                <View style={styles.flowRight}>
+                    <TextInput
+                        underlineColorAndroid={'transparent'}
+                    style={styles.userInput}/>
+
+                    <Text style={styles.to}>
+                        To
+                    </Text>
+
+                    <TextInput
+                        underlineColorAndroid={'transparent'}
+                        style={styles.userInput}/>
                 </View>
 
                 {spinner}
@@ -125,16 +162,15 @@ export default class SearchPage extends Component<{}> {
 }
 
 const styles = StyleSheet.create({
+    background: {
+        padding: 20,
+        backgroundColor: '#FAFFFF'
+    },
     description: {
         marginBottom: 20,
         fontSize: 18,
         textAlign: 'center',
         color: '#656565',
-    },
-    container: {
-        padding: 30,
-        marginTop: 65,
-        alignItems: 'center',
     },
     flowRight: {
         flexDirection: 'row',
@@ -146,14 +182,39 @@ const styles = StyleSheet.create({
         padding: 6,
         marginRight: 5,
         flexGrow: 1,
-        fontSize:18,
+        fontSize: 18,
         borderWidth: 1,
-        borderColor: '#48BBEC',
-        borderRadius: 8,
-        color: '#48BBEC',
+        borderColor: '#236366',
+        borderRadius: 4,
+        color: '#0ADDE5',
     },
     image: {
         width: 217,
         height: 138,
     },
+    checkBox: {
+        paddingLeft: 6,
+    },
+    checkBoxElement: {
+        marginRight: 12,
+    },
+    heading: {
+        fontSize: 20,
+        textAlign: 'justify',
+        marginTop: 12,
+        marginBottom: 12,
+    },
+    userInput: {
+        height: 24,
+        padding: 6,
+        flexGrow: 1,
+        fontSize: 14,
+        borderWidth: 1,
+        borderColor: '#236366',
+        borderRadius: 4,
+    },
+    to: {
+        paddingLeft: 6,
+        paddingRight: 6,
+    }
 });
