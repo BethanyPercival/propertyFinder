@@ -7,9 +7,11 @@
     "test": "jest"
   },
   "dependencies": {
+    "ajv": "^6.2.0",
     "react": "16.2.0",
     "react-native": "0.53.3",
     "react-native-check-box": "^2.0.2",
+    "react-native-picker-select": "^2.0.1",
     "react-navigation": "^1.2.0",
     "react-scripts": "^1.1.1"
   },

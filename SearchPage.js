@@ -10,7 +10,8 @@ import {
     ActivityIndicator,
     Image,
 } from 'react-native';
-import CheckBox from 'react-native-check-box'
+import CheckBox from 'react-native-check-box';
+import RNPickerSelect from 'react-native-picker-select';
 
 function urlForQueryAndPage(key, value, pageNumber) {
     const data = {
@@ -45,6 +46,35 @@ export default class SearchPage extends Component<{}> {
             buy: false,
             rent: false,
             share: false,
+            priceMin: 50000,
+            priceMax: 150000,
+            bedroomMin: 0,
+            bedroomMax: 1,
+            bathroomMin: 0,
+            bathroomMax: 1,
+            bedroomAndBathroomOptions: [{
+                label: '0',
+                value: '0',
+            }, {
+                label: '1',
+                value: '1',
+            }, {
+                label: '2',
+                value: '2',
+            }, {
+                label: '3',
+                value: '3',
+            }, {
+                label: '4',
+                value: '4',
+            }, {
+                label: '5',
+                value: '5',
+            }, {
+                label: '6+',
+                value: 'max',
+            },
+            ]
         };
     }
 
@@ -91,7 +121,7 @@ export default class SearchPage extends Component<{}> {
             <ActivityIndicator size={'large'}/> : null;
 
         return (
-            <View style={styles.background}>
+            <View style={styles.container}>
                 <Text style={styles.description}>
                     Please enter your search criteria
                 </Text>
@@ -143,7 +173,7 @@ export default class SearchPage extends Component<{}> {
                 <View style={styles.flowRight}>
                     <TextInput
                         underlineColorAndroid={'transparent'}
-                    style={styles.userInput}/>
+                        style={styles.userInput}/>
 
                     <Text style={styles.to}>
                         To
@@ -154,6 +184,49 @@ export default class SearchPage extends Component<{}> {
                         style={styles.userInput}/>
                 </View>
 
+                <Text style={styles.heading}>
+                    Bedrooms
+                </Text>
+
+                <View style={styles.flowRight}>
+                    <RNPickerSelect
+                        style={styles.pickerSelect}
+                        items={this.state.bedroomAndBathroomOptions}
+                        onValueChange={
+                            (item) => {
+                                this.setState({
+                                    bedroomMin: item.value,
+                                });
+                            }
+                        }
+                        onUpArrow={() => {
+                            this.inputRefs.name.focus();
+                        }}
+                        onDownArrow={() => {
+                            this.inputRefs.picker2.togglePicker();
+                        }}
+                        value={this.state.bedroomMin}
+                        ref={(el) => {
+                            this.inputRefs.picker = el;
+                        }}/>
+
+                    <Text style={styles.to}>
+                        To
+                    </Text>
+
+                    <RNPickerSelect
+                        style={styles.pickerSelect}
+                        items={this.state.bedroomAndBathroomOptions}
+                        onValueChange={
+                            (item) => {
+                                this.setState({
+                                    bedroomMax: item.value,
+                                });
+                            }
+                        }/>
+                </View>
+
+
                 {spinner}
                 <Text style={styles.description}>{this.state.message}</Text>
             </View>
@@ -162,7 +235,7 @@ export default class SearchPage extends Component<{}> {
 }
 
 const styles = StyleSheet.create({
-    background: {
+    container: {
         padding: 20,
         backgroundColor: '#FAFFFF'
     },
@@ -216,5 +289,15 @@ const styles = StyleSheet.create({
     to: {
         paddingLeft: 6,
         paddingRight: 6,
+    },
+    pickerSelect: {
+        fontSize: 16,
+        paddingTop: 13,
+        paddingHorizontal: 10,
+        paddingBottom: 12,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        backgroundColor: 'white',
     }
 });
